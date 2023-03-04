@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.board.dao.BoardDao">
+	<select id="listBoard" resultType="com.board.dto.EmployeeVO" >
+		select LPAD(num, 3, '0') as num, name, phone, position,email from employee where (
+		name like '%'||'${param}'||'%' or
+		phone like '%'||'${param}'||'%' or
+		position like '%'||'${param}'||'%' or
+		email like '%'||'${param}'||'%'
+		) order by num desc
+	</select>
+	<select id="listNum" resultType="com.board.dto.EmployeeVO" >
+		select num from employee where (
+		name like '%'||'${param}'||'%' or
+		phone like '%'||'${param}'||'%' or
+		position like '%'||'${param}'||'%' or
+		email like '%'||'${param}'||'%'
+		)order by num desc
+	</select>
+	
+	<delete id="deleteList">
+		delete from employee where num= ${param}
+	</delete>
+	
+	<insert id="insertList" parameterType="com.board.dto.EmployeeVO">
+		<selectKey keyProperty="num" resultType="String" order="BEFORE">
+        select aboard.nextval FROM DUAL
+    	</selectKey>
+		insert into employee (num,name,phone,position,email) values(#{num},#{name},#{phone},#{position},#{email})
+	</insert>
+
+	<select id="boardListOne" resultType="com.board.dto.EmployeeVO" >
+		select * from employee where num= #{num}
+	</select>
+	
+	<update id="updateList" parameterType="com.board.dto.EmployeeVO">
+		update employee set name=#{name}, phone=#{phone}, position=#{position}, email=#{email} where num=#{num}
+	</update>
+	
+</mapper>
